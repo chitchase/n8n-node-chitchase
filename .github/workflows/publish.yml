@@ -65,6 +65,8 @@ on:
       # Matches 0.1.0, 1.2.3, 2.0.0-rc.1, etc.
       # See "TAG CONVENTION" above if you prefer tags with a "v" prefix.
       - '*.*.*'
+  # Lets you run Publish from the Actions tab (workflow → "Run workflow") without a new tag.
+  workflow_dispatch:
 
 jobs:
   publish:
