@@ -18,6 +18,9 @@
 		"type": "git",
 		"url": "https://github.com/chitchase/n8n-node-chitchase.git"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "n8n-node build",
 		"build:watch": "tsc --watch",
