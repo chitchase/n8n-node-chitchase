@@ -20,6 +20,9 @@
 # ─── ONE-TIME SETUP ────────────────────────────────────────────────────────────
 #
 # Option A — OIDC Trusted Publishing (recommended, no long-lived secrets):
+#   First-time packages: the package must exist on npm before you can attach a Trusted
+#   Publisher. Do ONE initial publish with Option B (NPM_TOKEN), then add the Trusted
+#   Publisher on the package settings page for all future tag publishes.
 #   1. Log in to npmjs.com and open your package's settings.
 #   2. Under "Publish access" → "Trusted Publishers", click "Add a publisher".
 #   3. Select GitHub Actions and fill in:
@@ -78,12 +81,18 @@ jobs:
       contents: read
 
     steps:
+      # Full history helps npm provenance / attestations match the tagged commit.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
+      # registry-url is required so npm can use GitHub OIDC (Trusted Publisher) during publish.
+      # See https://docs.npmjs.com/trusted-publishers
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
       - name: Install dependencies
