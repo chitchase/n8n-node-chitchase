@@ -33,10 +33,12 @@
 #   4. Leave the NPM_TOKEN secret unset in this repository. GitHub's OIDC
 #      token is used instead — no secret ever touches your repo settings.
 #
-# Option B — npm Automation Token (fallback):
+# Option B — Granular access token (fallback):
 #   1. On npmjs.com: Access Tokens → Generate New Token → Granular Access Token.
 #      Scope it to this package with "Read and write" publish permission.
-#   2. In GitHub: Settings → Secrets and variables → Actions → New secret.
+#   2. Enable "Bypass 2FA" on the token (required for CI publish if your account
+#      uses 2FA; otherwise npm returns EOTP / "requires a one-time password").
+#   3. In GitHub: Settings → Secrets and variables → Actions → New secret.
 #      Name it NPM_TOKEN and paste the token value.
 #
 # Both options work with --provenance. Provenance is signed by GitHub's OIDC
