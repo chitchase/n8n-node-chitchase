@@ -1,0 +1,4561 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "ChitChase API Documentation",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://chitchase.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": ""
+    },
+    {
+      "name": "Broadcast",
+      "description": ""
+    },
+    {
+      "name": "Conversations",
+      "description": ""
+    },
+    {
+      "name": "Groups",
+      "description": ""
+    },
+    {
+      "name": "Labels",
+      "description": ""
+    },
+    {
+      "name": "Message Templates",
+      "description": ""
+    },
+    {
+      "name": "Messages",
+      "description": ""
+    },
+    {
+      "name": "Phone Numbers",
+      "description": ""
+    },
+    {
+      "name": "WhatsApp Message Templates",
+      "description": ""
+    },
+    {
+      "name": "WhatsApp Phone Numbers",
+      "description": ""
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "default": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Use a valid Sanctum Bearer token. You can create API tokens from your account settings."
+      }
+    }
+  },
+  "security": [
+    {
+      "default": []
+    }
+  ],
+  "paths": {
+    "/api/hello": {
+      "get": {
+        "summary": "Hello (test endpoint)",
+        "operationId": "hellotestEndpoint",
+        "description": "Quick connectivity check: returns \"world\" when authenticated. Optionally pass a `phone_number_id` to also verify that phone number is accessible within your business.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "phone_number_id",
+            "description": "uuid optional ChitChase phone number UUID to validate against your business.",
+            "example": 9,
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "uuid optional ChitChase phone number UUID to validate against your business.",
+              "example": 9
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "world"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "message": "The selected phone number id is invalid.",
+                    "errors": {
+                      "phone_number_id": [
+                        "The selected phone number id is invalid."
+                      ]
+                    }
+                  },
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The selected phone number id is invalid."
+                    },
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "phone_number_id": {
+                          "type": "array",
+                          "example": [
+                            "The selected phone number id is invalid."
+                          ],
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone_number_id": {
+                    "type": "string",
+                    "description": "Must be a valid UUID.",
+                    "example": "66529e01-d113-3473-8d6f-9e11e09332ea",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/groups/{group_id}/broadcast/conversations-by-labels": {
+      "post": {
+        "summary": "Get conversations by labels (broadcast)",
+        "operationId": "getConversationsByLabelsbroadcast",
+        "description": "Get conversations in a group that have any of the given labels. Use to build the recipient list for a broadcast before sending.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                      },
+                      "phone_number_id": {
+                        "type": "string",
+                        "example": "019cba60-7f06-7335-841d-10705116a676"
+                      },
+                      "external_id": {
+                        "type": "string",
+                        "example": "15551234567"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                      },
+                      "custom_name": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                      },
+                      "completed_at": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "labels": {
+                        "type": "array",
+                        "example": []
+                      },
+                      "phone_number": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "019cba60-7f06-7335-841d-10705116a676"
+                          },
+                          "phone_number": {
+                            "type": "string",
+                            "example": "+15551234567"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Main Line"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                      "external_id": "15551234567",
+                      "name": "John Doe",
+                      "custom_name": null,
+                      "completed_at": null,
+                      "created_at": "2026-03-04T19:43:32.000000Z",
+                      "updated_at": "2026-03-04T19:43:32.000000Z",
+                      "labels": [],
+                      "phone_number": {
+                        "id": "019cba60-7f06-7335-841d-10705116a676",
+                        "phone_number": "+15551234567",
+                        "name": "Main Line"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Broadcast"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "label_ids": {
+                    "type": "array",
+                    "description": "Array of label UUIDs.",
+                    "example": [
+                      "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "label_ids"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "group_id",
+          "description": "The ID of the group.",
+          "example": "019a8243-36fe-7318-b272-83546cdfa44f",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "group",
+          "description": "Optional parameter. uuid required The group ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/groups/{group_id}/broadcast/search-conversations": {
+      "get": {
+        "summary": "Search conversations in group (broadcast)",
+        "operationId": "searchConversationsInGroupbroadcast",
+        "description": "Search conversations within a group by name, custom name, or phone. Use to find and select recipients for a broadcast.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "description": "Search query.",
+            "example": "john",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Search query.",
+              "example": "john"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                      },
+                      "phone_number_id": {
+                        "type": "string",
+                        "example": "019cba60-7f06-7335-841d-10705116a676"
+                      },
+                      "external_id": {
+                        "type": "string",
+                        "example": "15551234567"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                      },
+                      "custom_name": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                      },
+                      "completed_at": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "labels": {
+                        "type": "array",
+                        "example": []
+                      },
+                      "phone_number": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "019cba60-7f06-7335-841d-10705116a676"
+                          },
+                          "phone_number": {
+                            "type": "string",
+                            "example": "+15551234567"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Main Line"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                      "external_id": "15551234567",
+                      "name": "John Doe",
+                      "custom_name": null,
+                      "completed_at": null,
+                      "created_at": "2026-03-04T19:43:32.000000Z",
+                      "updated_at": "2026-03-04T19:43:32.000000Z",
+                      "labels": [],
+                      "phone_number": {
+                        "id": "019cba60-7f06-7335-841d-10705116a676",
+                        "phone_number": "+15551234567",
+                        "name": "Main Line"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Broadcast"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Must be at least 1 character.",
+                    "example": "vmqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsju"
+                  }
+                },
+                "required": [
+                  "query"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "group_id",
+          "description": "The ID of the group.",
+          "example": "019a8243-36fe-7318-b272-83546cdfa44f",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "group",
+          "description": "Optional parameter. uuid required The group ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/groups/{group_id}/broadcast/send": {
+      "post": {
+        "summary": "Send a broadcast",
+        "operationId": "sendABroadcast",
+        "description": "Send a template message to multiple conversations in a group. Use for campaigns or bulk notifications (e.g. announcements, promotions).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": 2,
+                    "failed": 0,
+                    "results": [
+                      {
+                        "conversation_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                        "message_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b9"
+                      },
+                      {
+                        "conversation_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7ba",
+                        "message_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7bb"
+                      }
+                    ],
+                    "errors": []
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "failed": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "results": {
+                      "type": "array",
+                      "example": [
+                        {
+                          "conversation_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                          "message_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b9"
+                        },
+                        {
+                          "conversation_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7ba",
+                          "message_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7bb"
+                        }
+                      ],
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "conversation_id": {
+                            "type": "string",
+                            "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                          },
+                          "message_id": {
+                            "type": "string",
+                            "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b9"
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Broadcast"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "conversation_ids": {
+                    "type": "array",
+                    "description": "Array of conversation UUIDs.",
+                    "example": [
+                      "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "template_name": {
+                    "type": "string",
+                    "description": "Template name.",
+                    "example": "welcome_message"
+                  },
+                  "language": {
+                    "type": "string",
+                    "description": "Language code.",
+                    "example": "en_US"
+                  },
+                  "parameters": {
+                    "type": "array",
+                    "description": "optional Template parameters.",
+                    "example": null,
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "header_image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "optional Header image.",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "conversation_ids",
+                  "template_name",
+                  "language"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "group_id",
+          "description": "The ID of the group.",
+          "example": "019a8243-36fe-7318-b272-83546cdfa44f",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "group",
+          "description": "Optional parameter. uuid required The group ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/conversations": {
+      "get": {
+        "summary": "List conversations",
+        "operationId": "listConversations",
+        "description": "Load the inbox or conversation list for your business. Use filters to show only open or completed conversations, or scope by group or phone number.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "filter[open]",
+            "description": "Optional. Filter to open conversations.",
+            "example": null,
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Optional. Filter to open conversations.",
+              "example": null
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter[completed]",
+            "description": "Optional. Filter to completed conversations.",
+            "example": null,
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Optional. Filter to completed conversations.",
+              "example": null
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter[group_id]",
+            "description": "uuid Optional. Filter by group ID.",
+            "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "uuid Optional. Filter by group ID.",
+              "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter[phone_number_id]",
+            "description": "uuid Optional. Filter by phone number ID.",
+            "example": 9,
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "uuid Optional. Filter by phone number ID.",
+              "example": 9
+            }
+          },
+          {
+            "in": "query",
+            "name": "include",
+            "description": "Optional. Comma-separated: lastMessage, lastMessage.media, lastMessage.sender, labels, business.",
+            "example": "lastMessage,labels",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Optional. Comma-separated: lastMessage, lastMessage.media, lastMessage.sender, labels, business.",
+              "example": "lastMessage,labels"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                      },
+                      "phone_number_id": {
+                        "type": "string",
+                        "example": "019cba60-7f06-7335-841d-10705116a676"
+                      },
+                      "external_id": {
+                        "type": "string",
+                        "example": "123456"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Customer Name"
+                      },
+                      "custom_name": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                      },
+                      "completed_at": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "is_pinned": {
+                        "type": "boolean",
+                        "example": false
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                      "external_id": "123456",
+                      "name": "Customer Name",
+                      "custom_name": null,
+                      "completed_at": null,
+                      "created_at": "2026-03-04T19:43:32.000000Z",
+                      "updated_at": "2026-03-04T19:43:32.000000Z",
+                      "is_pinned": false
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversations"
+        ]
+      },
+      "post": {
+        "summary": "Start a new conversation",
+        "operationId": "startANewConversation",
+        "description": "Create a new conversation with a customer by phone number. Use when initiating outbound contact from a specific phone number (channel).",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                    "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                    "external_id": "15551234567",
+                    "name": "John Doe",
+                    "custom_name": null,
+                    "completed_at": null,
+                    "created_at": "2026-03-04T19:43:32.000000Z",
+                    "updated_at": "2026-03-04T19:43:32.000000Z",
+                    "is_pinned": false
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    },
+                    "phone_number_id": {
+                      "type": "string",
+                      "example": "019cba60-7f06-7335-841d-10705116a676"
+                    },
+                    "external_id": {
+                      "type": "string",
+                      "example": "15551234567"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John Doe"
+                    },
+                    "custom_name": {
+                      "type": "string",
+                      "example": null,
+                      "nullable": true
+                    },
+                    "completed_at": {
+                      "type": "string",
+                      "example": null,
+                      "nullable": true
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:32.000000Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:32.000000Z"
+                    },
+                    "is_pinned": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversations"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "recipient_phone_number": {
+                    "type": "string",
+                    "description": "Recipient phone number (E.164 or national format).",
+                    "example": "+15551234567"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Display name for the contact.",
+                    "example": "John Doe"
+                  },
+                  "phone_number_id": {
+                    "type": "uuid",
+                    "description": "Your ChitChase phone number ID to use for this conversation.",
+                    "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                  }
+                },
+                "required": [
+                  "recipient_phone_number",
+                  "name",
+                  "phone_number_id"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/conversations/{conversation_id}/pin/toggle": {
+      "post": {
+        "summary": "Toggle conversation pin",
+        "operationId": "toggleConversationPin",
+        "description": "Pin or unpin a conversation for the current user. Use to keep important chats at the top of the list.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {},
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversations"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "conversation_id",
+          "description": "The ID of the conversation.",
+          "example": "019a864b-609e-716e-ac3d-b99ad1082342",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "conversation",
+          "description": "Optional parameter. uuid required The conversation ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/conversations/{conversation_id}/completion/toggle": {
+      "post": {
+        "summary": "Toggle conversation completed status",
+        "operationId": "toggleConversationCompletedStatus",
+        "description": "Mark a conversation as completed or reopen it. Use when closing a ticket or resuming a resolved chat.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {},
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversations"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "conversation_id",
+          "description": "The ID of the conversation.",
+          "example": "019a864b-609e-716e-ac3d-b99ad1082342",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "conversation",
+          "description": "Optional parameter. uuid required The conversation ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/conversations/{conversation_id}/custom-name": {
+      "post": {
+        "summary": "Set conversation custom name",
+        "operationId": "setConversationCustomName",
+        "description": "Set a custom display name for a conversation. Use to show a friendly name (e.g. customer or company) instead of the default.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {},
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversations"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "custom_name": {
+                    "type": "string",
+                    "description": "Custom name for the conversation.",
+                    "example": "VIP Customer"
+                  }
+                },
+                "required": [
+                  "custom_name"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "conversation_id",
+          "description": "The ID of the conversation.",
+          "example": "019a864b-609e-716e-ac3d-b99ad1082342",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "conversation",
+          "description": "Optional parameter. uuid required The conversation ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/conversations/{conversation_id}/suggest-reply": {
+      "post": {
+        "summary": "Suggest a reply for a conversation",
+        "operationId": "suggestAReplyForAConversation",
+        "description": "Get an AI-suggested reply based on conversation context. Use to help agents draft responses or polish a message (optional draft in `text`).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Thank you for reaching out! How can we help you today?"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversations"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "optional Optional draft or hint for the suggestion.",
+                    "example": null,
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "conversation_id",
+          "description": "The ID of the conversation.",
+          "example": "019a864b-609e-716e-ac3d-b99ad1082342",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "conversation",
+          "description": "Optional parameter. uuid required The conversation ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/conversations/search": {
+      "get": {
+        "summary": "Search conversations",
+        "operationId": "searchConversations",
+        "description": "Search conversations by name, custom name, external ID, or label. Use to find a specific chat (min 3 characters).",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "description": "Search query (min 3 characters).",
+            "example": "john",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Search query (min 3 characters).",
+              "example": "john"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                      },
+                      "phone_number_id": {
+                        "type": "string",
+                        "example": "019cba60-7f06-7335-841d-10705116a676"
+                      },
+                      "external_id": {
+                        "type": "string",
+                        "example": "15551234567"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                      },
+                      "custom_name": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                      },
+                      "completed_at": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "is_pinned": {
+                        "type": "boolean",
+                        "example": false
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                      "external_id": "15551234567",
+                      "name": "John Doe",
+                      "custom_name": null,
+                      "completed_at": null,
+                      "created_at": "2026-03-04T19:43:32.000000Z",
+                      "updated_at": "2026-03-04T19:43:32.000000Z",
+                      "is_pinned": false
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversations"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Must be at least 3 characters.",
+                    "example": "vmqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjur"
+                  }
+                },
+                "required": [
+                  "query"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/conversations/{conversation_id}/messages": {
+      "get": {
+        "summary": "List messages in a conversation",
+        "operationId": "listMessagesInAConversation",
+        "description": "Load the message history for a conversation. Use when opening a chat thread or syncing messages for display.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b9"
+                      },
+                      "external_id": {
+                        "type": "string",
+                        "example": "e2fcb40d-11fd-3728-93c0-963438ce0b28"
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                      },
+                      "text": {
+                        "type": "string",
+                        "example": "Message text"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "is_read": {
+                        "type": "boolean",
+                        "example": false
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b9",
+                      "external_id": "e2fcb40d-11fd-3728-93c0-963438ce0b28",
+                      "conversation_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "text": "Message text",
+                      "created_at": "2026-03-04T19:43:32.000000Z",
+                      "is_read": false
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversations"
+        ]
+      },
+      "post": {
+        "summary": "Send a message in a conversation",
+        "operationId": "sendAMessageInAConversation",
+        "description": "Send a text or media message (image, video, audio, document) to a customer via WhatsApp. Use for agent replies or outbound messages.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b9",
+                    "external_id": "wamid.xxx",
+                    "conversation_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                    "text": "Hello!",
+                    "created_at": "2026-03-04T19:43:32.000000Z",
+                    "is_read": false,
+                    "sender": {
+                      "first_name": "Jane",
+                      "last_name": "Doe",
+                      "email": "jane@example.com",
+                      "full_name": "Jane Doe"
+                    },
+                    "media": []
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b9"
+                    },
+                    "external_id": {
+                      "type": "string",
+                      "example": "wamid.xxx"
+                    },
+                    "conversation_id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    },
+                    "text": {
+                      "type": "string",
+                      "example": "Hello!"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:32.000000Z"
+                    },
+                    "is_read": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "sender": {
+                      "type": "object",
+                      "properties": {
+                        "first_name": {
+                          "type": "string",
+                          "example": "Jane"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "example": "Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "jane@example.com"
+                        },
+                        "full_name": {
+                          "type": "string",
+                          "example": "Jane Doe"
+                        }
+                      }
+                    },
+                    "media": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Messages"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "optional Text body (required if file not provided).",
+                    "example": "Hello!"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "optional Media file (image, video, audio, or document)."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "conversation_id",
+          "description": "The ID of the conversation.",
+          "example": "019a864b-609e-716e-ac3d-b99ad1082342",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "conversation",
+          "description": "Optional parameter. uuid required The conversation ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/conversations/{conversation_id}/messages/read-all": {
+      "post": {
+        "summary": "Mark all messages in a conversation as read",
+        "operationId": "markAllMessagesInAConversationAsRead",
+        "description": "Mark all messages in a conversation as read for the current user. Use when opening a chat to clear unread state.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "marked_count": 5
+                  },
+                  "properties": {
+                    "marked_count": {
+                      "type": "integer",
+                      "example": 5
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversations"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "conversation_id",
+          "description": "The ID of the conversation.",
+          "example": "019a864b-609e-716e-ac3d-b99ad1082342",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "conversation",
+          "description": "Optional parameter. uuid required The conversation ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/groups/{id}": {
+      "get": {
+        "summary": "Get a group",
+        "operationId": "getAGroup",
+        "description": "Fetch a group with its assigned phone numbers and users. Use for group management UI or to see who has access.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "data": {
+                      "group": {
+                        "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                        "name": "Support",
+                        "description": "Customer support",
+                        "color": "#3B82F6",
+                        "sort_order": 1,
+                        "is_active": true
+                      },
+                      "allPhoneNumbers": [
+                        {
+                          "id": "019cba60-7f06-7335-841d-10705116a676",
+                          "phone_number": "+15551234567",
+                          "name": "Main Line"
+                        }
+                      ],
+                      "allUsers": [
+                        {
+                          "id": "019cba60-7f56-714a-a09b-cf7bbe59442f",
+                          "first_name": "Jane",
+                          "last_name": "Doe",
+                          "email": "jane@example.com"
+                        }
+                      ],
+                      "groupPhoneNumbers": [],
+                      "groupUsers": []
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "group": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Support"
+                            },
+                            "description": {
+                              "type": "string",
+                              "example": "Customer support"
+                            },
+                            "color": {
+                              "type": "string",
+                              "example": "#3B82F6"
+                            },
+                            "sort_order": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "is_active": {
+                              "type": "boolean",
+                              "example": true
+                            }
+                          }
+                        },
+                        "allPhoneNumbers": {
+                          "type": "array",
+                          "example": [
+                            {
+                              "id": "019cba60-7f06-7335-841d-10705116a676",
+                              "phone_number": "+15551234567",
+                              "name": "Main Line"
+                            }
+                          ],
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "019cba60-7f06-7335-841d-10705116a676"
+                              },
+                              "phone_number": {
+                                "type": "string",
+                                "example": "+15551234567"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Main Line"
+                              }
+                            }
+                          }
+                        },
+                        "allUsers": {
+                          "type": "array",
+                          "example": [
+                            {
+                              "id": "019cba60-7f56-714a-a09b-cf7bbe59442f",
+                              "first_name": "Jane",
+                              "last_name": "Doe",
+                              "email": "jane@example.com"
+                            }
+                          ],
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "019cba60-7f56-714a-a09b-cf7bbe59442f"
+                              },
+                              "first_name": {
+                                "type": "string",
+                                "example": "Jane"
+                              },
+                              "last_name": {
+                                "type": "string",
+                                "example": "Doe"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "jane@example.com"
+                              }
+                            }
+                          }
+                        },
+                        "groupPhoneNumbers": {
+                          "type": "array",
+                          "example": []
+                        },
+                        "groupUsers": {
+                          "type": "array",
+                          "example": []
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Groups"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "description": "The ID of the group.",
+          "example": "019a8243-36fe-7318-b272-83546cdfa44f",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "group",
+          "description": "Optional parameter. uuid required The group ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/groups/{group_id}/phone-numbers/{phoneNumber_id}": {
+      "post": {
+        "summary": "Attach phone number to group",
+        "operationId": "attachPhoneNumberToGroup",
+        "description": "Add a phone number to a group. Use when assigning a channel to a department or team.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "message": "Phone number assigned to group successfully",
+                    "data": {
+                      "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                      "group_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "group_name": "Support"
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Phone number assigned to group successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "phone_number_id": {
+                          "type": "string",
+                          "example": "019cba60-7f06-7335-841d-10705116a676"
+                        },
+                        "group_id": {
+                          "type": "string",
+                          "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                        },
+                        "group_name": {
+                          "type": "string",
+                          "example": "Support"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Groups"
+        ]
+      },
+      "delete": {
+        "summary": "Detach phone number from group",
+        "operationId": "detachPhoneNumberFromGroup",
+        "description": "Remove a phone number from a group. Use when reassigning or unassigning a channel.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "message": "Phone number removed from group successfully",
+                    "data": {
+                      "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                      "group_id": null
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Phone number removed from group successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "phone_number_id": {
+                          "type": "string",
+                          "example": "019cba60-7f06-7335-841d-10705116a676"
+                        },
+                        "group_id": {
+                          "type": "string",
+                          "example": null,
+                          "nullable": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Groups"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "group_id",
+          "description": "The ID of the group.",
+          "example": "019a8243-36fe-7318-b272-83546cdfa44f",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "phoneNumber_id",
+          "description": "The ID of the phoneNumber.",
+          "example": "019a8243-370c-706b-b2ec-b7135e89e1a5",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "group",
+          "description": "Optional parameter. uuid required The group ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        },
+        {
+          "in": "path",
+          "name": "phoneNumber",
+          "description": "Optional parameter. uuid required The phone number ID.",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": 9
+            }
+          }
+        }
+      ]
+    },
+    "/api/groups/{group_id}/users/{user_id}": {
+      "post": {
+        "summary": "Attach user to group",
+        "operationId": "attachUserToGroup",
+        "description": "Add a user (team member) to a group. Use to grant access to conversations for that group.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "message": "User assigned to group successfully",
+                    "data": {
+                      "user_id": "019cba60-7f56-714a-a09b-cf7bbe59442f",
+                      "group_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "group_name": "Support"
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User assigned to group successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "string",
+                          "example": "019cba60-7f56-714a-a09b-cf7bbe59442f"
+                        },
+                        "group_id": {
+                          "type": "string",
+                          "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                        },
+                        "group_name": {
+                          "type": "string",
+                          "example": "Support"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Groups"
+        ]
+      },
+      "delete": {
+        "summary": "Detach user from group",
+        "operationId": "detachUserFromGroup",
+        "description": "Remove a user from a group. Use to revoke access to that group's conversations.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "message": "User removed from group successfully",
+                    "data": {
+                      "user_id": "019cba60-7f56-714a-a09b-cf7bbe59442f",
+                      "group_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User removed from group successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "string",
+                          "example": "019cba60-7f56-714a-a09b-cf7bbe59442f"
+                        },
+                        "group_id": {
+                          "type": "string",
+                          "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Groups"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "group_id",
+          "description": "The ID of the group.",
+          "example": "019a8243-36fe-7318-b272-83546cdfa44f",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "user_id",
+          "description": "The ID of the user.",
+          "example": "019a892e-5e71-7102-a648-9e1626a4b89e",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "group",
+          "description": "Optional parameter. uuid required The group ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        },
+        {
+          "in": "path",
+          "name": "user",
+          "description": "Optional parameter. uuid required The user ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/labels": {
+      "get": {
+        "summary": "List labels",
+        "operationId": "listLabels",
+        "description": "Fetch all labels for your business. Use to populate label selectors or filter conversations by label.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "VIP"
+                      },
+                      "color": {
+                        "type": "string",
+                        "example": "#3B82F6"
+                      },
+                      "business_id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "name": "VIP",
+                      "color": "#3B82F6",
+                      "business_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "created_at": "2026-03-04T19:43:32.000000Z",
+                      "updated_at": "2026-03-04T19:43:32.000000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Labels"
+        ]
+      },
+      "post": {
+        "summary": "Create a label",
+        "operationId": "createALabel",
+        "description": "Create a new label for your business. Use to add categories (e.g. VIP, Support) for organizing conversations.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                    "name": "VIP",
+                    "color": null,
+                    "business_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                    "created_at": "2026-03-04T19:43:32.000000Z",
+                    "updated_at": "2026-03-04T19:43:32.000000Z"
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "VIP"
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": null,
+                      "nullable": true
+                    },
+                    "business_id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:32.000000Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:32.000000Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Labels"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Label name.",
+                    "example": "VIP"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/labels/{id}": {
+      "put": {
+        "summary": "Update a label",
+        "operationId": "updateALabel",
+        "description": "Change a label's name or color. Use when renaming or restyling categories.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                    "name": "VIP",
+                    "color": "#3B82F6",
+                    "business_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                    "created_at": "2026-03-04T19:43:32.000000Z",
+                    "updated_at": "2026-03-04T19:43:32.000000Z"
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "VIP"
+                    },
+                    "color": {
+                      "type": "string",
+                      "example": "#3B82F6"
+                    },
+                    "business_id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:32.000000Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:32.000000Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Labels"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Label name.",
+                    "example": "VIP"
+                  },
+                  "color": {
+                    "type": "string",
+                    "description": "optional Hex color (max 7 chars).",
+                    "example": "#3B82F6",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a label",
+        "operationId": "deleteALabel",
+        "description": "Remove a label. Optionally reassign its conversations to another label before deleting.",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {},
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Labels"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "replacement_label_id": {
+                    "type": "uuid",
+                    "description": "optional Reassign conversations to this label before deleting.",
+                    "example": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "description": "The ID of the label.",
+          "example": "019a8769-c9a9-7323-b8bc-e390c90c10dd",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "label",
+          "description": "Optional parameter. uuid required The label ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/conversations/{conversation_id}/labels": {
+      "get": {
+        "summary": "List labels on a conversation",
+        "operationId": "listLabelsOnAConversation",
+        "description": "Get all labels attached to a conversation. Use to show tags on a chat or check if a conversation has a given label.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "VIP"
+                      },
+                      "color": {
+                        "type": "string",
+                        "example": "#3B82F6"
+                      },
+                      "business_id": {
+                        "type": "string",
+                        "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "example": "2026-03-04T19:43:32.000000Z"
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "name": "VIP",
+                      "color": "#3B82F6",
+                      "business_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "created_at": "2026-03-04T19:43:32.000000Z",
+                      "updated_at": "2026-03-04T19:43:32.000000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Labels"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "conversation_id",
+          "description": "The ID of the conversation.",
+          "example": "019a864b-609e-716e-ac3d-b99ad1082342",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "conversation",
+          "description": "Optional parameter. uuid required The conversation ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/conversations/{conversation_id}/labels/{label_id}": {
+      "post": {
+        "summary": "Attach a label to a conversation",
+        "operationId": "attachALabelToAConversation",
+        "description": "Add a label to a conversation. Use to tag chats (e.g. VIP, Urgent) or set a custom pivot value.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {},
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Labels"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "optional Pivot value.",
+                    "example": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Detach a label from a conversation",
+        "operationId": "detachALabelFromAConversation",
+        "description": "Remove a label from a conversation. Use when a tag no longer applies.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {},
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Labels"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "conversation_id",
+          "description": "The ID of the conversation.",
+          "example": "019a864b-609e-716e-ac3d-b99ad1082342",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "label_id",
+          "description": "The ID of the label.",
+          "example": "019a8769-c9a9-7323-b8bc-e390c90c10dd",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "conversation",
+          "description": "Optional parameter. uuid required The conversation ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        },
+        {
+          "in": "path",
+          "name": "label",
+          "description": "Optional parameter. uuid required The label ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/phone-numbers/{phoneNumber_id}/message-templates": {
+      "post": {
+        "summary": "Create message template for phone number (API)",
+        "operationId": "createMessageTemplateForPhoneNumberAPI",
+        "description": "Create and submit a message template for a phone number via the API. Use for programmatic template creation.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "meta": {
+                      "id": "123456"
+                    },
+                    "payload": {
+                      "name": "welcome",
+                      "category": "UTILITY",
+                      "language": "en_US"
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "123456"
+                        }
+                      }
+                    },
+                    "payload": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "welcome"
+                        },
+                        "category": {
+                          "type": "string",
+                          "example": "UTILITY"
+                        },
+                        "language": {
+                          "type": "string",
+                          "example": "en_US"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Message Templates"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "phoneNumber_id",
+          "description": "The ID of the phoneNumber.",
+          "example": "019a8243-370c-706b-b2ec-b7135e89e1a5",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/api/phone-numbers/{phoneNumber_id}/message-templates/{template_id}": {
+      "put": {
+        "summary": "Update message template for phone number (API)",
+        "operationId": "updateMessageTemplateForPhoneNumberAPI",
+        "description": "Update an existing message template for a phone number via the API. Use for programmatic template updates.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "meta": {
+                      "id": "123456"
+                    },
+                    "payload": {
+                      "name": "welcome",
+                      "category": "UTILITY",
+                      "language": "en_US"
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "123456"
+                        }
+                      }
+                    },
+                    "payload": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "welcome"
+                        },
+                        "category": {
+                          "type": "string",
+                          "example": "UTILITY"
+                        },
+                        "language": {
+                          "type": "string",
+                          "example": "en_US"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Message Templates"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "phoneNumber_id",
+          "description": "The ID of the phoneNumber.",
+          "example": "019a8243-370c-706b-b2ec-b7135e89e1a5",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "template_id",
+          "description": "The ID of the template.",
+          "example": "019a8248-6a09-7248-970b-69e912d187f3",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/api/conversations/{conversation_id}/messages/whatsapp-message-template": {
+      "post": {
+        "summary": "Send a WhatsApp message template",
+        "operationId": "sendAWhatsAppMessageTemplate",
+        "description": "Send a pre-approved template in a conversation by meta_id. Use for template-based replies with optional header image and parameters.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b9",
+                    "external_id": "wamid.xxx",
+                    "conversation_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                    "text": "Template body",
+                    "created_at": "2026-03-04T19:43:32.000000Z",
+                    "is_read": false,
+                    "media": []
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b9"
+                    },
+                    "external_id": {
+                      "type": "string",
+                      "example": "wamid.xxx"
+                    },
+                    "conversation_id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    },
+                    "text": {
+                      "type": "string",
+                      "example": "Template body"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:32.000000Z"
+                    },
+                    "is_read": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "media": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Messages"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "meta_id": {
+                    "type": "string",
+                    "description": "Meta template identifier.",
+                    "example": "123456789"
+                  },
+                  "header_image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "optional Header image for the template.",
+                    "nullable": true
+                  },
+                  "parameters": {
+                    "type": "array",
+                    "description": "optional Template parameters.",
+                    "example": null,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "meta_id"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "conversation_id",
+          "description": "The ID of the conversation.",
+          "example": "019a864b-609e-716e-ac3d-b99ad1082342",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "conversation",
+          "description": "Optional parameter. uuid required The conversation ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/messages/{message_id}/read": {
+      "post": {
+        "summary": "Mark a message as read",
+        "operationId": "markAMessageAsRead",
+        "description": "Mark a single message as read for the current user. Use when tracking read state per message.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {},
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Messages"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "message_id",
+          "description": "The ID of the message.",
+          "example": "019a8249-9032-70e6-8a24-9bada61da711",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "message",
+          "description": "Optional parameter. uuid required The message ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/phone-numbers/{phoneNumber_id}/assign-group": {
+      "post": {
+        "summary": "Assign phone number to a group",
+        "operationId": "assignPhoneNumberToAGroup",
+        "description": "Assign a phone number to a group (or move it to another). Use to organize numbers by department or team.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "message": "Phone number reassigned successfully",
+                    "data": {
+                      "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                      "group_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                      "group_name": "Support"
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Phone number reassigned successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "phone_number_id": {
+                          "type": "string",
+                          "example": "019cba60-7f06-7335-841d-10705116a676"
+                        },
+                        "group_id": {
+                          "type": "string",
+                          "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                        },
+                        "group_name": {
+                          "type": "string",
+                          "example": "Support"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Phone Numbers"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "group_id": {
+                    "type": "uuid",
+                    "description": "The group ID.",
+                    "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                  }
+                },
+                "required": [
+                  "group_id"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "phoneNumber_id",
+          "description": "The ID of the phoneNumber.",
+          "example": "019a8243-370c-706b-b2ec-b7135e89e1a5",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "phoneNumber",
+          "description": "Optional parameter. uuid required The phone number ID.",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": 9
+            }
+          }
+        }
+      ]
+    },
+    "/api/whatsapp-message-templates": {
+      "get": {
+        "summary": "List WhatsApp message templates",
+        "operationId": "listWhatsAppMessageTemplates",
+        "description": "List WhatsApp message templates for the business with optional filters and pagination.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "category",
+            "description": "Filter by category (marketing, utility, authentication).",
+            "example": null,
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter by category (marketing, utility, authentication).",
+              "example": null
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "description": "Filter by translation status (draft, pending, approved, rejected, paused).",
+            "example": null,
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter by translation status (draft, pending, approved, rejected, paused).",
+              "example": null
+            }
+          },
+          {
+            "in": "query",
+            "name": "phone_number_id",
+            "description": "uuid Filter by phone number.",
+            "example": null,
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "uuid Filter by phone number.",
+              "example": null
+            }
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "description": "Items per page (max 100).",
+            "example": 20,
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Items per page (max 100).",
+              "example": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "current_page": 1,
+                    "data": [
+                      {
+                        "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                        "name": "welcome",
+                        "category": "utility",
+                        "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                        "created_at": "2026-03-04T19:43:53.000000Z",
+                        "phone_number": {
+                          "id": "019cba60-7f06-7335-841d-10705116a676",
+                          "phone_number": "+15551234567",
+                          "name": "Main Line"
+                        },
+                        "translations": [],
+                        "creator": {
+                          "first_name": "Jane",
+                          "last_name": "Doe",
+                          "email": "jane@example.com",
+                          "full_name": "Jane Doe"
+                        }
+                      }
+                    ],
+                    "first_page_url": "/api/whatsapp-message-templates?page=1",
+                    "from": 1,
+                    "last_page": 1,
+                    "last_page_url": "/api/whatsapp-message-templates?page=1",
+                    "path": "/api/whatsapp-message-templates",
+                    "per_page": 20,
+                    "to": 1,
+                    "total": 1
+                  },
+                  "properties": {
+                    "current_page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": [
+                        {
+                          "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                          "name": "welcome",
+                          "category": "utility",
+                          "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                          "created_at": "2026-03-04T19:43:53.000000Z",
+                          "phone_number": {
+                            "id": "019cba60-7f06-7335-841d-10705116a676",
+                            "phone_number": "+15551234567",
+                            "name": "Main Line"
+                          },
+                          "translations": [],
+                          "creator": {
+                            "first_name": "Jane",
+                            "last_name": "Doe",
+                            "email": "jane@example.com",
+                            "full_name": "Jane Doe"
+                          }
+                        }
+                      ],
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "welcome"
+                          },
+                          "category": {
+                            "type": "string",
+                            "example": "utility"
+                          },
+                          "phone_number_id": {
+                            "type": "string",
+                            "example": "019cba60-7f06-7335-841d-10705116a676"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "example": "2026-03-04T19:43:53.000000Z"
+                          },
+                          "phone_number": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "019cba60-7f06-7335-841d-10705116a676"
+                              },
+                              "phone_number": {
+                                "type": "string",
+                                "example": "+15551234567"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Main Line"
+                              }
+                            }
+                          },
+                          "translations": {
+                            "type": "array",
+                            "example": []
+                          },
+                          "creator": {
+                            "type": "object",
+                            "properties": {
+                              "first_name": {
+                                "type": "string",
+                                "example": "Jane"
+                              },
+                              "last_name": {
+                                "type": "string",
+                                "example": "Doe"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "jane@example.com"
+                              },
+                              "full_name": {
+                                "type": "string",
+                                "example": "Jane Doe"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "first_page_url": {
+                      "type": "string",
+                      "example": "/api/whatsapp-message-templates?page=1"
+                    },
+                    "from": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "last_page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "last_page_url": {
+                      "type": "string",
+                      "example": "/api/whatsapp-message-templates?page=1"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/whatsapp-message-templates"
+                    },
+                    "per_page": {
+                      "type": "integer",
+                      "example": 20
+                    },
+                    "to": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "total": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Message Templates"
+        ]
+      },
+      "post": {
+        "summary": "Create WhatsApp message template",
+        "operationId": "createWhatsAppMessageTemplate",
+        "description": "Create a new template. Send either a full payload with translations (name, category, translations[])\nor a flat payload (name, category, language, text, header_text, footer_text, buttons, phone_number_id).\n\nSample variables (for Meta approval): When body, header, or URL button text contains placeholders like {{1}}, {{2}},\nyou must provide sample values so Meta can display a preview. Use body_example (flat payload) or\ntranslations[].example_variables (translations payload): one string per placeholder in order (index 0 = {{1}}, index 1 = {{2}}, etc.).",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                    "name": "welcome",
+                    "category": "utility",
+                    "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                    "translations": [],
+                    "creator": {
+                      "first_name": "Jane",
+                      "last_name": "Doe",
+                      "full_name": "Jane Doe"
+                    }
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "welcome"
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "utility"
+                    },
+                    "phone_number_id": {
+                      "type": "string",
+                      "example": "019cba60-7f06-7335-841d-10705116a676"
+                    },
+                    "translations": {
+                      "type": "array",
+                      "example": []
+                    },
+                    "creator": {
+                      "type": "object",
+                      "properties": {
+                        "first_name": {
+                          "type": "string",
+                          "example": "Jane"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "example": "Doe"
+                        },
+                        "full_name": {
+                          "type": "string",
+                          "example": "Jane Doe"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Message Templates"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Template name.",
+                    "example": "welcome"
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "One of: marketing, utility, authentication.",
+                    "example": "utility"
+                  },
+                  "translations": {
+                    "type": "array",
+                    "description": "optional When present, full create is used. Each item: language (5-char code), components (header, body, footer, buttons), and example_variables (array of sample strings for {{1}}, {{2}}, etc. in order; required when any component has placeholders).",
+                    "example": [
+                      "consequatur"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "phone_number_id": {
+                    "type": "uuid",
+                    "description": "optional Phone number to attach (for translations payload).",
+                    "example": null
+                  },
+                  "language": {
+                    "type": "string",
+                    "description": "when not using translations. Language code.",
+                    "example": "en_US"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "when not using translations. Body text; use {{1}}, {{2}} for variables.",
+                    "example": "Hello {{1}}"
+                  },
+                  "header_text": {
+                    "type": "string",
+                    "description": "optional Header text (max 60 chars).",
+                    "example": null
+                  },
+                  "footer_text": {
+                    "type": "string",
+                    "description": "optional Footer text (max 60 chars).",
+                    "example": null
+                  },
+                  "body_example": {
+                    "type": "array",
+                    "description": "when text contains {{1}}, {{2}}, etc. Sample values in order (one per placeholder); sent to Meta as BODY example for approval.",
+                    "example": [
+                      "John",
+                      "12345"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "buttons": {
+                    "type": "array",
+                    "description": "optional Buttons (quick_reply, url, phone_number).",
+                    "example": null,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "name",
+                  "category",
+                  "language",
+                  "text",
+                  "body_example"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/whatsapp-message-templates/{template_id}": {
+      "put": {
+        "summary": "Update a WhatsApp message template",
+        "operationId": "updateAWhatsAppMessageTemplate",
+        "description": "Update an existing template. Send either a full payload with translations (name, category, translations[])\nor a flat payload (name, category, language, text, header_text, footer_text, buttons, phone_number_id).\nSame payload shapes as create for consistency.\n\nSample variables (for Meta approval): When body, header, or URL button text contains placeholders like {{1}}, {{2}},\nyou must provide sample values. Use body_example (flat payload) or translations[].example_variables (translations payload).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                    "name": "updated_welcome",
+                    "category": "utility",
+                    "phone_number_id": "019cba60-d177-71d5-9a57-4612208ad17d",
+                    "created_by": "019cba60-7f56-714a-a09b-cf7bbe59442f",
+                    "created_at": "2026-03-04T19:43:53.000000Z",
+                    "updated_at": "2026-03-04T19:43:53.000000Z",
+                    "translations": [],
+                    "creator": {
+                      "first_name": "Jane",
+                      "last_name": "Doe",
+                      "email": "jane@example.com",
+                      "full_name": "Jane Doe"
+                    }
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "updated_welcome"
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "utility"
+                    },
+                    "phone_number_id": {
+                      "type": "string",
+                      "example": "019cba60-d177-71d5-9a57-4612208ad17d"
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "example": "019cba60-7f56-714a-a09b-cf7bbe59442f"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:53.000000Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "example": "2026-03-04T19:43:53.000000Z"
+                    },
+                    "translations": {
+                      "type": "array",
+                      "example": []
+                    },
+                    "creator": {
+                      "type": "object",
+                      "properties": {
+                        "first_name": {
+                          "type": "string",
+                          "example": "Jane"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "example": "Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "jane@example.com"
+                        },
+                        "full_name": {
+                          "type": "string",
+                          "example": "Jane Doe"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Message Templates"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "optional Template name.",
+                    "example": "updated_welcome"
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "optional One of: marketing, utility, authentication.",
+                    "example": "utility"
+                  },
+                  "translations": {
+                    "type": "array",
+                    "description": "optional When present, full update is used. Same shape as create.",
+                    "example": [
+                      "consequatur"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "phone_number_id": {
+                    "type": "uuid",
+                    "description": "optional Phone number (flat payload). Use template's if omitted.",
+                    "example": "consequatur"
+                  },
+                  "language": {
+                    "type": "string",
+                    "description": "when flat payload. Language code.",
+                    "example": "en_US"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "when flat payload. Body text; use {{1}}, {{2}} for variables.",
+                    "example": "consequatur"
+                  },
+                  "header_text": {
+                    "type": "string",
+                    "description": "optional Header text (max 60 chars).",
+                    "example": "consequatur"
+                  },
+                  "footer_text": {
+                    "type": "string",
+                    "description": "optional Footer text (max 60 chars).",
+                    "example": "consequatur"
+                  },
+                  "body_example": {
+                    "type": "array",
+                    "description": "when text contains {{1}}, {{2}}, etc. Sample values in order.",
+                    "example": [
+                      "consequatur"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "buttons": {
+                    "type": "array",
+                    "description": "optional Buttons (quick_reply, url, phone_number).",
+                    "example": [
+                      "consequatur"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "language",
+                  "text",
+                  "body_example"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete WhatsApp message template",
+        "operationId": "deleteWhatsAppMessageTemplate",
+        "description": "Delete a template by ID. Use to remove obsolete or unused templates.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "message": "Template deleted successfully"
+                  },
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Template deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Message Templates"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "template_id",
+          "description": "The ID of the template.",
+          "example": "019a8248-6a09-7248-970b-69e912d187f3",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "template",
+          "description": "Optional parameter. uuid required The template ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+            }
+          }
+        }
+      ]
+    },
+    "/api/whatsapp-message-templates/sync": {
+      "post": {
+        "summary": "Sync WhatsApp message templates",
+        "operationId": "syncWhatsAppMessageTemplates",
+        "description": "Sync templates from Meta into your business. Use to refresh the local template list after changes in Meta.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "message": "Templates synced successfully",
+                    "synced": 5,
+                    "updated": 2,
+                    "total": 7
+                  },
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Templates synced successfully"
+                    },
+                    "synced": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "updated": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "total": {
+                      "type": "integer",
+                      "example": 7
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Message Templates"
+        ]
+      }
+    },
+    "/api/phone-numbers/{phoneNumber}/templates": {
+      "get": {
+        "summary": "List templates for a phone number",
+        "operationId": "listTemplatesForAPhoneNumber",
+        "description": "List templates attached to a specific phone number. Each template includes its translations with full components (body, header, footer, buttons, example_variables). Use to show or edit template content for that number.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "phone_number": "+15551234567",
+                    "phone_number_name": "Main Line",
+                    "templates": [
+                      {
+                        "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                        "name": "hello_world",
+                        "category": "marketing",
+                        "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                        "translations": [
+                          {
+                            "id": "019cba60-7f56-714a-a09b-cf7bbe59442f",
+                            "template_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                            "language": "en_US",
+                            "status": "approved",
+                            "components": [
+                              {
+                                "type": "body",
+                                "text": "Hello {{1}}!"
+                              }
+                            ],
+                            "example_variables": [
+                              "John"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "template_count": 1
+                  },
+                  "properties": {
+                    "phone_number": {
+                      "type": "string",
+                      "example": "+15551234567"
+                    },
+                    "phone_number_name": {
+                      "type": "string",
+                      "example": "Main Line"
+                    },
+                    "templates": {
+                      "type": "array",
+                      "example": [
+                        {
+                          "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                          "name": "hello_world",
+                          "category": "marketing",
+                          "phone_number_id": "019cba60-7f06-7335-841d-10705116a676",
+                          "translations": [
+                            {
+                              "id": "019cba60-7f56-714a-a09b-cf7bbe59442f",
+                              "template_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                              "language": "en_US",
+                              "status": "approved",
+                              "components": [
+                                {
+                                  "type": "body",
+                                  "text": "Hello {{1}}!"
+                                }
+                              ],
+                              "example_variables": [
+                                "John"
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "hello_world"
+                          },
+                          "category": {
+                            "type": "string",
+                            "example": "marketing"
+                          },
+                          "phone_number_id": {
+                            "type": "string",
+                            "example": "019cba60-7f06-7335-841d-10705116a676"
+                          },
+                          "translations": {
+                            "type": "array",
+                            "example": [
+                              {
+                                "id": "019cba60-7f56-714a-a09b-cf7bbe59442f",
+                                "template_id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                                "language": "en_US",
+                                "status": "approved",
+                                "components": [
+                                  {
+                                    "type": "body",
+                                    "text": "Hello {{1}}!"
+                                  }
+                                ],
+                                "example_variables": [
+                                  "John"
+                                ]
+                              }
+                            ],
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "example": "019cba60-7f56-714a-a09b-cf7bbe59442f"
+                                },
+                                "template_id": {
+                                  "type": "string",
+                                  "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                                },
+                                "language": {
+                                  "type": "string",
+                                  "example": "en_US"
+                                },
+                                "status": {
+                                  "type": "string",
+                                  "example": "approved"
+                                },
+                                "components": {
+                                  "type": "array",
+                                  "example": [
+                                    {
+                                      "type": "body",
+                                      "text": "Hello {{1}}!"
+                                    }
+                                  ],
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "example": "body"
+                                      },
+                                      "text": {
+                                        "type": "string",
+                                        "example": "Hello {{1}}!"
+                                      }
+                                    }
+                                  }
+                                },
+                                "example_variables": {
+                                  "type": "array",
+                                  "example": [
+                                    "John"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "template_count": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Message Templates"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "phoneNumber",
+          "description": "Optional parameter. uuid required The phone number ID.",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": 9
+            }
+          }
+        }
+      ]
+    },
+    "/api/whatsapp-message-templates/copy": {
+      "post": {
+        "summary": "Copy templates between phone numbers",
+        "operationId": "copyTemplatesBetweenPhoneNumbers",
+        "description": "Copy templates from one phone number to others. Use to replicate template setup across numbers.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "message": "Templates copied successfully",
+                    "copied_count": 3,
+                    "source_phone_number": "+15551234567",
+                    "target_phone_numbers": [
+                      "+15559876543"
+                    ],
+                    "errors": []
+                  },
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Templates copied successfully"
+                    },
+                    "copied_count": {
+                      "type": "integer",
+                      "example": 3
+                    },
+                    "source_phone_number": {
+                      "type": "string",
+                      "example": "+15551234567"
+                    },
+                    "target_phone_numbers": {
+                      "type": "array",
+                      "example": [
+                        "+15559876543"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Message Templates"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "source_phone_number_id": {
+                    "type": "uuid",
+                    "description": "Source phone number ID.",
+                    "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                  },
+                  "target_phone_number_ids": {
+                    "type": "array",
+                    "description": "Array of target phone number UUIDs.",
+                    "example": [
+                      "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "source_phone_number_id",
+                  "target_phone_number_ids"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/whatsapp-message-templates/sync-group": {
+      "post": {
+        "summary": "Sync templates for a group",
+        "operationId": "syncTemplatesForAGroup",
+        "description": "Sync templates from one phone number to all others in the group. Use to keep group numbers in sync.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "message": "Templates synced successfully within group",
+                    "synced_count": 4,
+                    "source_phone_number": "+15551234567",
+                    "target_phone_numbers": [
+                      "+15559876543"
+                    ],
+                    "group_name": "Support",
+                    "errors": []
+                  },
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Templates synced successfully within group"
+                    },
+                    "synced_count": {
+                      "type": "integer",
+                      "example": 4
+                    },
+                    "source_phone_number": {
+                      "type": "string",
+                      "example": "+15551234567"
+                    },
+                    "target_phone_numbers": {
+                      "type": "array",
+                      "example": [
+                        "+15559876543"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "group_name": {
+                      "type": "string",
+                      "example": "Support"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Message Templates"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "group_id": {
+                    "type": "uuid",
+                    "description": "The group ID.",
+                    "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                  },
+                  "source_phone_number_id": {
+                    "type": "uuid",
+                    "description": "Source phone number ID.",
+                    "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                  }
+                },
+                "required": [
+                  "group_id",
+                  "source_phone_number_id"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/whatsapp-phone-numbers": {
+      "get": {
+        "summary": "List WhatsApp phone numbers",
+        "operationId": "listWhatsAppPhoneNumbers",
+        "description": "List all WhatsApp phone numbers for your business. Use to show channel list or pick a number for sending.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "data": [
+                      {
+                        "id": "019cba60-7f06-7335-841d-10705116a676",
+                        "phone_number_id": "123456",
+                        "phone_number": "+15551234567",
+                        "display_phone_number": "(555) 123-4567",
+                        "name": "Main Line",
+                        "description": null,
+                        "verified_name": "My Business",
+                        "status": "connected",
+                        "type": "mobile",
+                        "is_primary": true,
+                        "quality_rating": "GREEN",
+                        "code_verification_status": "VERIFIED",
+                        "messaging_limit_tier": "TIER_1K",
+                        "waba": {
+                          "id": "waba123",
+                          "name": "My WABA",
+                          "currency": "USD",
+                          "meta_business_id": "meta123"
+                        },
+                        "group": {
+                          "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                          "name": "Support",
+                          "color": "#3B82F6"
+                        },
+                        "created_at": "2026-03-04T19:43:32.000000Z",
+                        "updated_at": "2026-03-04T19:43:32.000000Z"
+                      }
+                    ]
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": [
+                        {
+                          "id": "019cba60-7f06-7335-841d-10705116a676",
+                          "phone_number_id": "123456",
+                          "phone_number": "+15551234567",
+                          "display_phone_number": "(555) 123-4567",
+                          "name": "Main Line",
+                          "description": null,
+                          "verified_name": "My Business",
+                          "status": "connected",
+                          "type": "mobile",
+                          "is_primary": true,
+                          "quality_rating": "GREEN",
+                          "code_verification_status": "VERIFIED",
+                          "messaging_limit_tier": "TIER_1K",
+                          "waba": {
+                            "id": "waba123",
+                            "name": "My WABA",
+                            "currency": "USD",
+                            "meta_business_id": "meta123"
+                          },
+                          "group": {
+                            "id": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8",
+                            "name": "Support",
+                            "color": "#3B82F6"
+                          },
+                          "created_at": "2026-03-04T19:43:32.000000Z",
+                          "updated_at": "2026-03-04T19:43:32.000000Z"
+                        }
+                      ],
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "019cba60-7f06-7335-841d-10705116a676"
+                          },
+                          "phone_number_id": {
+                            "type": "string",
+                            "example": "123456"
+                          },
+                          "phone_number": {
+                            "type": "string",
+                            "example": "+15551234567"
+                          },
+                          "display_phone_number": {
+                            "type": "string",
+                            "example": "(555) 123-4567"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Main Line"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": null,
+                            "nullable": true
+                          },
+                          "verified_name": {
+                            "type": "string",
+                            "example": "My Business"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "connected"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "mobile"
+                          },
+                          "is_primary": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "quality_rating": {
+                            "type": "string",
+                            "example": "GREEN"
+                          },
+                          "code_verification_status": {
+                            "type": "string",
+                            "example": "VERIFIED"
+                          },
+                          "messaging_limit_tier": {
+                            "type": "string",
+                            "example": "TIER_1K"
+                          },
+                          "waba": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "waba123"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "My WABA"
+                              },
+                              "currency": {
+                                "type": "string",
+                                "example": "USD"
+                              },
+                              "meta_business_id": {
+                                "type": "string",
+                                "example": "meta123"
+                              }
+                            }
+                          },
+                          "group": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "9d4e2c1a-8b3f-4e5d-a1b2-c3d4e5f6a7b8"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Support"
+                              },
+                              "color": {
+                                "type": "string",
+                                "example": "#3B82F6"
+                              }
+                            }
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "example": "2026-03-04T19:43:32.000000Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "example": "2026-03-04T19:43:32.000000Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Phone Numbers"
+        ]
+      },
+      "post": {
+        "summary": "Add WhatsApp phone number",
+        "operationId": "addWhatsAppPhoneNumber",
+        "description": "Register a new WhatsApp phone number for the business. Use when adding a channel from Meta.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "123456",
+                    "phone_number": "+15551234567",
+                    "display_phone_number": "(555) 123-4567",
+                    "verified_name": "My Business",
+                    "quality_rating": "GREEN"
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "123456"
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "example": "+15551234567"
+                    },
+                    "display_phone_number": {
+                      "type": "string",
+                      "example": "(555) 123-4567"
+                    },
+                    "verified_name": {
+                      "type": "string",
+                      "example": "My Business"
+                    },
+                    "quality_rating": {
+                      "type": "string",
+                      "example": "GREEN"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Phone Numbers"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phone_number": {
+                    "type": "string",
+                    "description": "Phone number.",
+                    "example": "+15551234567"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "optional Display name.",
+                    "example": null,
+                    "nullable": true
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "optional Description.",
+                    "example": null,
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "phone_number"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/whatsapp-phone-numbers/sync": {
+      "post": {
+        "summary": "Sync WhatsApp phone numbers",
+        "operationId": "syncWhatsAppPhoneNumbers",
+        "description": "Sync phone numbers from Meta into your business. Use to refresh the list after adding numbers in Meta.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "message": "Phone numbers synced successfully",
+                    "data": {
+                      "imported": 2,
+                      "updated": 1
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Phone numbers synced successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "imported": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "updated": {
+                          "type": "integer",
+                          "example": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Phone Numbers"
+        ]
+      }
+    },
+    "/api/whatsapp-phone-numbers/{phoneNumber_id}/test-connection": {
+      "post": {
+        "summary": "Test WhatsApp phone number connection",
+        "operationId": "testWhatsAppPhoneNumberConnection",
+        "description": "Verify that a phone number is correctly connected to the WhatsApp Business API. Use for health checks or troubleshooting.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "message": "Connection is active and working",
+                    "data": {
+                      "phone_number": {
+                        "id": "123456",
+                        "display_phone_number": "(555) 123-4567",
+                        "verified_name": "My Business",
+                        "quality_rating": "GREEN",
+                        "code_verification_status": "VERIFIED",
+                        "status": "verified"
+                      },
+                      "waba": {
+                        "id": "waba123",
+                        "name": "My WABA",
+                        "currency": "USD"
+                      }
+                    }
+                  },
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Connection is active and working"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "phone_number": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "123456"
+                            },
+                            "display_phone_number": {
+                              "type": "string",
+                              "example": "(555) 123-4567"
+                            },
+                            "verified_name": {
+                              "type": "string",
+                              "example": "My Business"
+                            },
+                            "quality_rating": {
+                              "type": "string",
+                              "example": "GREEN"
+                            },
+                            "code_verification_status": {
+                              "type": "string",
+                              "example": "VERIFIED"
+                            },
+                            "status": {
+                              "type": "string",
+                              "example": "verified"
+                            }
+                          }
+                        },
+                        "waba": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "waba123"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "My WABA"
+                            },
+                            "currency": {
+                              "type": "string",
+                              "example": "USD"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "WhatsApp Phone Numbers"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "phoneNumber_id",
+          "description": "The ID of the phoneNumber.",
+          "example": "019a8243-370c-706b-b2ec-b7135e89e1a5",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "phoneNumber",
+          "description": "Optional parameter. uuid required The phone number ID.",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "examples": {
+            "omitted": {
+              "summary": "When the value is omitted",
+              "value": ""
+            },
+            "present": {
+              "summary": "When the value is present",
+              "value": 9
+            }
+          }
+        }
+      ]
+    }
+  }
+}
